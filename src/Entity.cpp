@@ -28,4 +28,4 @@ namespace ECS {
     std::size_t Entity::getID() const {
         return this->id;
     }
-}  // namespace Engine
+}  // namespace ECS

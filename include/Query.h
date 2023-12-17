@@ -1,5 +1,5 @@
-#ifndef SIMULATION_QUERY_H
-#define SIMULATION_QUERY_H
+#ifndef ECS_QUERY_H
+#define ECS_QUERY_H
 
 namespace ECS {
     template <typename... C>
@@ -14,6 +14,6 @@ namespace ECS {
 
     template <typename... C>
     struct Without : Query<C...> {};
-}  // namespace Engine
+}  // namespace ECS
 
-#endif  // SIMULATION_QUERY_H
+#endif  // ECS_QUERY_H

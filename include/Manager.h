@@ -1,8 +1,5 @@
-#ifndef SIMULATION_WORLD_H
-#define SIMULATION_WORLD_H
-
-#include <map>
-#include <unordered_set>
+#ifndef ECS_WORLD_H
+#define ECS_WORLD_H
 
 namespace ECS {
     struct Manager {
@@ -40,5 +37,5 @@ namespace ECS {
         static Archetypes archetypes;
         static std::size_t componentID;
     };
-}  // namespace Engine
-#endif  // SIMULATION_WORLD_H
+}  // namespace ECS
+#endif  // ECS_WORLD_H

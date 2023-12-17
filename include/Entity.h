@@ -1,8 +1,5 @@
-#ifndef SIMULATION_ENTITY_H
-#define SIMULATION_ENTITY_H
-
-#include <map>
-#include <vector>
+#ifndef ECS_ENTITY_H
+#define ECS_ENTITY_H
 
 namespace ECS {
     struct Entity {
@@ -22,6 +19,6 @@ namespace ECS {
         std::vector<std::uint8_t> signature {};
         std::map<std::size_t, std::shared_ptr<Component>> components {};
     };
-}  // namespace Engine
+}  // namespace ECS
 
-#endif  // SIMULATION_ENTITY_H
+#endif  // ECS_ENTITY_H

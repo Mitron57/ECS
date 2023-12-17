@@ -1,5 +1,5 @@
-#ifndef SIMULATION_FILTER_H
-#define SIMULATION_FILTER_H
+#ifndef ECS_FILTER_H
+#define ECS_FILTER_H
 
 namespace ECS {
     template <typename...>
@@ -22,6 +22,6 @@ namespace ECS {
         Filter() = delete;
         static std::vector<std::shared_ptr<Entity>> filter();
     };
-} // namespace Engine
+} // namespace ECS
 
-#endif  // SIMULATION_FILTER_H
+#endif  // ECS_FILTER_H

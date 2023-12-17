@@ -1,4 +1,5 @@
-#include <vector>
+#ifndef ECS_UTILS_H
+#define ECS_UTILS_H
 
 namespace ECS::Utils {
     void fillMissingBits(std::vector<std::uint8_t>& data,
@@ -15,4 +16,6 @@ namespace ECS::Utils {
         }
         return result;
     }
-}  // namespace Engine::Utils
+}  // namespace ECS::Utils
+
+#endif // ECS_UTILS_H

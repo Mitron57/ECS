@@ -1,5 +1,9 @@
-#ifndef SIMULATION_ENGINE_H
-#define SIMULATION_ENGINE_H
+#ifndef ECS_H
+#define ECS_H
+
+#include <map>
+#include <vector>
+#include <unordered_set>
 
 #include <Utils.cpp>
 #include <Component.h>
@@ -9,4 +13,4 @@
 #include <Query.h>
 #include <Filter.cpp>
 
-#endif // SIMULATION_ENGINE_H
+#endif // ECS_H

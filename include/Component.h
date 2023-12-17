@@ -1,5 +1,5 @@
-#ifndef SIMULATION_COMPONENT_H
-#define SIMULATION_COMPONENT_H
+#ifndef ECS_COMPONENT_H
+#define ECS_COMPONENT_H
 
 namespace ECS {
     struct Component {
@@ -11,4 +11,4 @@ namespace ECS {
     };
 }
 
-#endif  // SIMULATION_COMPONENT_H
+#endif  // ECS_COMPONENT_H

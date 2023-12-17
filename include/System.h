@@ -1,5 +1,5 @@
-#ifndef SIMULATION_SYSTEM_H
-#define SIMULATION_SYSTEM_H
+#ifndef ECS_SYSTEM_H
+#define ECS_SYSTEM_H
 
 namespace ECS {
     struct System {
@@ -11,4 +11,4 @@ namespace ECS {
     };
 }
 
-#endif  // SIMULATION_SYSTEM_H
+#endif  // ECS_SYSTEM_H
