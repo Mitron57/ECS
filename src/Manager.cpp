@@ -4,7 +4,6 @@ namespace ECS {
     std::map<std::size_t, std::shared_ptr<Entity>> Manager::entities;
     std::vector<std::unique_ptr<System>> Manager::systems;
     std::map<std::size_t, std::size_t> Manager::componentsID;
-    Manager::Archetypes Manager::archetypes;
     std::size_t Manager::componentID;
 
     std::shared_ptr<Entity> Manager::createEntity() {
@@ -14,28 +13,23 @@ namespace ECS {
     }
 
     void Manager::deleteEntity(std::shared_ptr<Entity> entity) {
-        entities.erase(entity->getID());
-        auto first {
-            archetypes[Utils::bitSequenceToULL(entity->getSignature())].begin()
-        };
-        const auto end {
-            archetypes[Utils::bitSequenceToULL(entity->getSignature())].end()
-        };
-        for (; first != end; ++first) {
-            if ((*first)->getID() == entity->getID()) {
-                archetypes[Utils::bitSequenceToULL(entity->getSignature())]
-                    .erase(first);
-                break;
-            }
+        if (entity) {
+            entities.erase(entity->getID());
         }
     }
-    template <typename C>
+    template <typename... C>
     void Manager::addComponent(const std::shared_ptr<Entity>& entity) {
         if (entity) {
-            if (!componentsID.contains(typeid(C).hash_code())) {
-                componentsID[typeid(C).hash_code()] = componentID++;
-            }
-            entity->setComponent<C>(componentsID[typeid(C).hash_code()]);
+            (
+                [&entity] {
+                    std::uint64_t hash {typeid(C).hash_code()};
+                    if (!componentsID.contains(hash)) {
+                        componentsID[hash] = componentID++;
+                    }
+                    entity->setComponent<C>(componentsID[hash]);
+                }(),
+                ...
+            );
         }
     }
 
@@ -70,10 +64,19 @@ namespace ECS {
     std::tuple<std::shared_ptr<T>...> Manager::getComponents(
         const std::shared_ptr<Entity>& entity
     ) {
-        auto& components {entity->getComponents()};
-        return {std::reinterpret_pointer_cast<T>(
-            components.at(Manager::getComponentID<T>())
-        )...};
+        if (entity) {
+            const auto& components {entity->getComponents()};
+            auto getComponent = [&components] <typename C> (C) -> std::shared_ptr<C> {
+                if (components.contains(Manager::getComponentID<C>())) {
+                    return std::reinterpret_pointer_cast<C>(
+                        components.at(Manager::getComponentID<C>())
+                    );
+                }
+                return nullptr;
+            };
+            return {getComponent(T{})...};
+        }
+        return {};
     }
 
     const std::map<std::size_t, std::shared_ptr<Entity>>&
@@ -81,30 +84,13 @@ namespace ECS {
         return entities;
     }
 
-    const Manager::Archetypes& Manager::getArchetypes() {
-        return archetypes;
-    }
-
-    void Manager::addArchetype(
-        const std::vector<std::shared_ptr<Entity>>& archetype
-    ) {
-        if (!archetype.empty()) {
-            const std::size_t signature {
-                Utils::bitSequenceToULL(archetype[0]->getSignature())
-            };
-            if (archetypes.contains(signature)) {
-                for (auto& entity : archetype) {
-                    auto iter {std::ranges::find_if(archetypes[signature], [id = entity->getID()] (const auto& unique) {
-                        return unique->getID() == id;
-                    })};
-                    if (iter == archetypes[signature].end()) {
-                        archetypes[signature].push_back(entity);
-                    }
-                }
-                return;
-            }
-            archetypes[signature] = archetype;
+    template <typename C>
+    bool Manager::hasComponent(const std::shared_ptr<Entity>& entity) {
+        if (entity) {
+            std::uint64_t id = Manager::getComponentID<C>();
+            const std::vector<std::uint8_t>& signature = entity->getSignature();
+            return id < signature.size() && signature[id] == 1;
         }
+        return false;
     }
-
 }  // namespace ECS
